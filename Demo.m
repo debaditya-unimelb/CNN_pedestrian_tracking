@@ -19,7 +19,6 @@ A = single(zeros(1,1000));
 B = single(zeros(1,2));
 average_activation=zeros(1000,250);
 next_id = length(bboxes.bboxes.ans{1, 1});
-next_id1 = length(bboxes.bboxes.ans{1, 1});
 for ooo = 1:250
 all_index{ooo} = 0;
 end
@@ -32,7 +31,7 @@ imageNames = {imageNames.name}';
 dataFolder = 'C:\Users\acharyad\Documents\MATLAB\DeepLearningForComputerVision\data';
 
 
-weight = 0.5; % weight of the pixel and feature vector
+weight = 0.3; % weight of the pixel and feature vector
 thr_fv= 0.8; % threshold of the distance for feature vector
 thr_pxl=0.12; % Threshold for the pixel distance
 frames_to_compare = 10; % number of frames to compare for reidentification
@@ -284,91 +283,28 @@ end
 
 %% GENERATING NEW IDS
 
-if ii==1
-    zola=Index_min_norm_new';
-else
-    zola=[];
-    for kolla=1:10
-        if (ii-kolla)> 0
-            zola=cat(2,zola,Index_new_stack{ii-kolla}');
-            zola=unique(zola);
-        end
-    end
-end
-
-
-
-DD1 = zeros(1,next_id);
-DD2 = zeros(1,next_id);
-DD4 = zeros(1,next_id);
-
-
 for lok = 1:length(Index_min_norm)
     for loki = lok+1:length(Index_min_norm)
         if Index_min_norm_new(lok)==Index_min_norm_new(loki)
             
-            if comb(Index_min_norm(lok),lok) < comb(Index_min_norm(lok),loki)
-           
-                for imfeat = 1:next_id 
-                    DD1(imfeat) = pdist2(single(average_activation(:,imfeat)'),single(acti_stack{ii}(:,loki)'));
-                end                
-                for imfeat1 = 1:next_id
-                    DD2(imfeat1) = pdist2(A, single(average_activation(:,imfeat1)'));
-                end
-                DD3 = pdist2(A, single(acti_stack{ii}(:,loki)'));
-                for imfeat2 = 1:next_id
-                    DD4(imfeat2) = (DD1(imfeat2))/ (sqrt(DD2(imfeat2)*DD3));
-                end
-                [dist_average,Index_average]=min(DD4);
-                
-                
-                 if dist_average < thr_fv && ~ismember(Index_average,Index_min_norm_new)
-                     Index_min_norm_new(loki)=Index_average;
-                 else
-                     
+            if comb(Index_min_norm(lok),lok) < comb(Index_min_norm(lok),loki)                
                      next_id=next_id+1;
                      Index_min_norm_new(loki)=next_id;
-                     
-                 end
+
             else
-                
-                for imfeat = 1:next_id
-                    DD1(imfeat) = pdist2(single(average_activation(:,imfeat)'),single(acti_stack{ii}(:,lok)'));
-                end                
-                for imfeat1 = 1:next_id
-                    DD2(imfeat1) = pdist2(A, single(average_activation(:,imfeat1)'));
-                end
-                DD3 = pdist2(A, single(acti_stack{ii}(:,lok)'));
-                for imfeat2 = 1:next_id
-                    DD4(imfeat2) = (DD1(imfeat2))/ (sqrt(DD2(imfeat2)*DD3));
-                end
-                [dist_average,Index_average]=min(DD4);
-                
-                    if dist_average < thr_fv && ~ismember(Index_average,Index_min_norm_new)
-                        Index_min_norm_new(lok)=Index_average;
-                        
-                        
-                    else
-                
-                        next_id=next_id+1;
-                        Index_min_norm_new(lok)=next_id;
-                    end
-            
+                     next_id=next_id+1;
+                     Index_min_norm_new(lok)=next_id;
             end
+            
         end
     end
 end
 
-Index_norm_stack{ii}=Index_min_norm;
-%% CALCULATING AVERAGE ACTIVATIONS
 
-if ii==1
-    average_activation(:,1:14)=acti_stack_image{1};
-end
+Index_norm_stack{ii}=Index_min_norm;
 
 if ii==1
    Index_min_norm_previous=1:14; 
-   
 end
 
 
@@ -396,4 +332,3 @@ if ii==(length(imageNames)-2)
 end
      
 end
-
