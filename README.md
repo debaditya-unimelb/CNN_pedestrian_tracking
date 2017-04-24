@@ -1,5 +1,5 @@
 # CNN_pedestrian_tracking
-This is the code in MATLAB for the works related to the paper "Real-time detection and tracking of pedestrians in CCTV images using a deep convolutional neural network"
+This is the code in MATLAB for the works related to the paper "Real-time detection and tracking of pedestrians in CCTV images using a deep convolutional neural network". 
 The dataset used is available at http://www.robots.ox.ac.uk/ActiveVision/Research/Projects/2009bbenfold_headpose/project.html#datasets/. 
 First 250 frames of the data is used for evaluation
 The detections are done using Faster-RCNN on the above dataset
